@@ -8,3 +8,10 @@ fi
 
 alias ll='ls -alF'
 
+
+alias ag='ag --pager=less'
+alias grep='grep --color=auto'
+
+export LESS="-RinSFX"
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
