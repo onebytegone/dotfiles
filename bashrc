@@ -1,5 +1,7 @@
 platform=`uname | awk '{print tolower($0)}'`
 
+source ./config/collector.bash
+
 if [[ $platform == 'linux' ]]; then
    alias ls='ls --color=auto'
 else
