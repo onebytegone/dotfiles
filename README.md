@@ -10,3 +10,9 @@ cd ~
 git clone https://github.com/onebytegone/mycli.git .mycli
 ```
 
+# Setup
+
+_ to be automated _
+
+  * create sym links
+  * user info for git
