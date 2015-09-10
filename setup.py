@@ -62,6 +62,23 @@ def symlink(name, target, config_path, force = False):
 
 
 # ----------------------------------
+# Menus
+# ----------------------------------
+
+def menu_symlink():
+   display_menu([
+      {
+         'name': 'vimrc',
+         'action': lambda: symlink('.vimrc', '~/', 'vimrc')
+      },
+      {
+         'name': 'gitconfig',
+         'action': lambda: symlink('.gitconfig', '~/', 'gitconfig')
+      }
+   ])
+
+
+# ----------------------------------
 # Runtime
 # ----------------------------------
 
@@ -72,7 +89,7 @@ display_menu([
    },
    {
       'name': 'Setup symlinks',
-      'action': lambda: False
+      'action': menu_symlink
    },
    {
       'name': 'Setup git user',
