@@ -17,3 +17,14 @@ alias grep='grep --color=auto'
 export LESS="-RinSFX"
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
+
+
+#####################
+# Increase history
+#####################
+
+HISTSIZE=10000
+HISTFILESIZE=400000
+
+shopt -s histappend
+
