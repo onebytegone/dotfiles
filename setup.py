@@ -11,7 +11,7 @@ def display_menu(options, hasBack = False):
    # Generate menu items
    menuItems = []
    for index, option in enumerate(options):
-      menuItems.append(create_menu_option(str(index + 1), option, False))
+      menuItems.append(create_menu_option(str(index + 1), option['name'], option['action']))
    if hasBack:
       menuItems.append(create_menu_option("b", "To previous menu", False))
    menuItems.append(create_menu_option("q", "Quit", False))
@@ -31,6 +31,7 @@ def display_menu(options, hasBack = False):
       if selected in validOptions:
          valid = True
          # Handle response
+         menuItems[validOptions.index(selected)]['action']()
       else:
          print "Invalid option."
 
@@ -65,7 +66,16 @@ def symlink(name, target, config_path, force = False):
 # ----------------------------------
 
 display_menu([
-   'Run all tasks',
-   'Setup symlinks',
-   'Setup git user'
+   {
+      'name': 'Run all tasks',
+      'action': lambda: False
+   },
+   {
+      'name': 'Setup symlinks',
+      'action': lambda: False
+   },
+   {
+      'name': 'Setup git user',
+      'action': lambda: False
+   }
 ]);
