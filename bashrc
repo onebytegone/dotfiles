@@ -1,6 +1,6 @@
 platform=`uname | awk '{print tolower($0)}'`
 
-source ./config/collector.bash
+source ./scripts/collector.bash
 
 
 #####################
