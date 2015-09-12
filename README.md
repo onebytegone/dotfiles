@@ -12,7 +12,8 @@ git clone https://github.com/onebytegone/mycli.git .mycli
 
 # Setup
 
-_ to be automated _
+_to be automated_
 
-  * create sym links
   * user info for git
+  * auto setup
+  * all items menu items
