@@ -12,6 +12,11 @@ git clone https://github.com/onebytegone/mycli.git .mycli
 
 # Setup
 
+```
+cd .mycli
+./setup.py
+```
+
 _to be automated_
 
   * user info for git
