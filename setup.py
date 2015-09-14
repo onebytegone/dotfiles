@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+from subprocess import call
 
 
 # ----------------------------------
@@ -60,6 +61,15 @@ def symlink(name, target, config_path, force = False):
    os.symlink(sanitize_path(config_path), linked)
    return True
 
+def git_user_config():
+   # TODO: add verification loop
+   print "What is the name to use for git?"
+   name = raw_input("-> ")
+   call(['git', 'config', '--global', 'user.name', name])
+
+   print "What email to use for git?"
+   email = raw_input("-> ")
+   call(['git', 'config', '--global', 'user.email', email])
 
 # ----------------------------------
 # Menus
@@ -93,6 +103,6 @@ display_menu([
    },
    {
       'name': 'Setup git user',
-      'action': lambda: False
+      'action': git_user_config
    }
 ]);

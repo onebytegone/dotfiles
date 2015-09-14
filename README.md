@@ -19,6 +19,5 @@ cd .mycli
 
 _to be automated_
 
-  * user info for git
   * auto setup
   * all items menu items
