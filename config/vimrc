@@ -7,3 +7,5 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 set number
 highlight LineNr ctermfg=darkgrey
+syntax on
+
