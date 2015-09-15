@@ -3,6 +3,21 @@
 import os
 from subprocess import call
 
+# ----------------------------------
+# Config
+# ----------------------------------
+
+SymlinkConfig = [
+   {
+      'name': 'vimrc',
+      'action': lambda: symlink('.vimrc', '~/', 'vimrc')
+   },
+   {
+      'name': 'gitconfig',
+      'action': lambda: symlink('.gitconfig', '~/', 'gitconfig')
+   }
+];
+
 
 # ----------------------------------
 # Menu
@@ -71,21 +86,20 @@ def git_user_config():
    email = raw_input("-> ")
    call(['git', 'config', '--global', 'user.email', email])
 
+def full_setup():
+   # Symlinks
+   for link in SymlinkConfig:
+      link['action']()
+
+   # Git config
+   git_user_config()
+
 # ----------------------------------
 # Menus
 # ----------------------------------
 
 def menu_symlink():
-   display_menu([
-      {
-         'name': 'vimrc',
-         'action': lambda: symlink('.vimrc', '~/', 'vimrc')
-      },
-      {
-         'name': 'gitconfig',
-         'action': lambda: symlink('.gitconfig', '~/', 'gitconfig')
-      }
-   ])
+   display_menu(SymlinkConfig)
 
 
 # ----------------------------------
@@ -94,8 +108,8 @@ def menu_symlink():
 
 display_menu([
    {
-      'name': 'Run all tasks',
-      'action': lambda: False
+      'name': 'Run entire setup',
+      'action': full_setup
    },
    {
       'name': 'Setup symlinks',
