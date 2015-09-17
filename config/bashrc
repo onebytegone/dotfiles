@@ -1,6 +1,7 @@
 platform=`uname | awk '{print tolower($0)}'`
 
-source ../scripts/collector.bash
+# TODO: add templating so this link will work
+# source ../scripts/collector.bash
 
 
 #####################
