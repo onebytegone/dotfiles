@@ -2,6 +2,7 @@
 
 import os
 from subprocess import call
+import sys
 
 # ----------------------------------
 # Config
@@ -66,15 +67,12 @@ def create_menu_option(key, name, action):
 def sanitize_path(path):
    return os.path.abspath(os.path.expanduser(path))
 
-def symlink(name, target, config_path, force = False):
-   linked = os.path.join(sanitize_path(target), name)
+def link_to_bashrc():
+   # TODO: make idempotent
+   # TODO: handle when .bashrc doesn't exist
 
-   if os.path.exists(linked) and not force:
-      print "Not making symlink. File already exists at: " + linked
-      return False
-
-   os.symlink(sanitize_path(config_path), linked)
-   return True
+   with open(sanitize_path("~/.bashrc"), "a") as bashrc:
+     bashrc.write("\n\nsource " + project_root() + "/config/bashrc \n\n")
 
 def git_user_config():
    # TODO: add verification loop
@@ -94,6 +92,24 @@ def full_setup():
    # Git config
    git_user_config()
 
+
+# ----------------------------------
+# Util
+# ----------------------------------
+
+def symlink(name, target, config_path, force = False):
+   linked = os.path.join(sanitize_path(target), name)
+
+   if os.path.exists(linked) and not force:
+      print "Not making symlink. File already exists at: " + linked
+      return False
+
+   os.symlink(sanitize_path(config_path), linked)
+   return True
+
+def project_root():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 # ----------------------------------
 # Menus
 # ----------------------------------
@@ -110,6 +126,10 @@ display_menu([
    {
       'name': 'Run entire setup',
       'action': full_setup
+   },
+   {
+      'name': 'Add link for bashrc',
+      'action': link_to_bashrc
    },
    {
       'name': 'Setup symlinks',
