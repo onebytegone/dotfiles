@@ -1,7 +1,7 @@
 platform=`uname | awk '{print tolower($0)}'`
+parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 
-# TODO: add templating so this link will work
-# source ../scripts/collector.bash
+source $parent_path/../scripts/collector.bash
 
 
 #####################
