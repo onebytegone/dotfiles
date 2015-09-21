@@ -1,5 +1,14 @@
+#####################
+# Global settings
+#####################
+
 platform=`uname | awk '{print tolower($0)}'`
 parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
+
+
+#####################
+# Links
+#####################
 
 source $parent_path/../scripts/collector.bash
 
