@@ -3,6 +3,8 @@
 import os
 from subprocess import call
 import sys
+import mmap
+
 
 # ----------------------------------
 # Config
@@ -68,15 +70,19 @@ def sanitize_path(path):
    return os.path.abspath(os.path.expanduser(path))
 
 def link_to_bashrc():
-   # TODO: make idempotent
    bash_path = sanitize_path("~/.bashrc")
+   link = "\nsource " + project_root() + "/config/bashrc\n"
 
    if not os.path.isfile(bash_path):
       print "Error: \"" + bash_path + "\" was not found, not creating link."
       return
 
-   with open(bash_path, "a") as bashrc:
-     bashrc.write("\n\nsource " + project_root() + "/config/bashrc \n\n")
+   with open(bash_path, "ab+") as bashrc:
+      mapped = mmap.mmap(bashrc.fileno(), 0, access=mmap.ACCESS_READ)
+      if mapped.find(link) != -1:
+         print "Warning: it appears that the link was already setup, not creating link."
+         return
+      bashrc.write("\n" + link + "\n")
 
 def git_user_config():
    # TODO: add verification loop
