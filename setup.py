@@ -69,9 +69,13 @@ def sanitize_path(path):
 
 def link_to_bashrc():
    # TODO: make idempotent
-   # TODO: handle when .bashrc doesn't exist
+   bash_path = sanitize_path("~/.bashrc")
 
-   with open(sanitize_path("~/.bashrc"), "a") as bashrc:
+   if not os.path.isfile(bash_path):
+      print "Error: \"" + bash_path + "\" was not found, not creating link."
+      return
+
+   with open(bash_path, "a") as bashrc:
      bashrc.write("\n\nsource " + project_root() + "/config/bashrc \n\n")
 
 def git_user_config():
