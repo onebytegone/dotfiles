@@ -99,6 +99,9 @@ def full_setup():
    for link in SymlinkConfig:
       link['action']()
 
+   # Link bashrc
+   link_to_bashrc()
+
    # Git config
    git_user_config()
 
