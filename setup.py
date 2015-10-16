@@ -78,10 +78,11 @@ def link_to_bashrc():
       return
 
    with open(bash_path, "ab+") as bashrc:
-      mapped = mmap.mmap(bashrc.fileno(), 0, access=mmap.ACCESS_READ)
-      if mapped.find(link) != -1:
-         print "Warning: it appears that the link was already setup, not creating link."
-         return
+      if os.path.getsize(bash_path) > 0:
+         mapped = mmap.mmap(bashrc.fileno(), 0, access=mmap.ACCESS_READ)
+         if mapped.find(link) != -1:
+            print "Warning: it appears that the link was already setup, not creating link."
+            return
       bashrc.write("\n" + link + "\n")
 
 def git_user_config():
