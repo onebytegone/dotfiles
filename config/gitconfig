@@ -3,4 +3,5 @@
 [alias]
    st = status
    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-
+[core]
+   editor = vim
