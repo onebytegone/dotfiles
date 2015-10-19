@@ -13,11 +13,11 @@ import mmap
 SymlinkConfig = [
    {
       'name': 'vimrc',
-      'action': lambda: symlink('.vimrc', '~/', 'vimrc')
+      'action': lambda: symlink('.vimrc', '~/', 'config/vimrc')
    },
    {
       'name': 'gitconfig',
-      'action': lambda: symlink('.gitconfig', '~/', 'gitconfig')
+      'action': lambda: symlink('.gitconfig', '~/', 'config/gitconfig')
    }
 ];
 
