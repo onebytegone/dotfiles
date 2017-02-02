@@ -25,3 +25,15 @@ function create_config_link {
 }
 
 create_config_link "${HOME_DIR}/.vimrc" "${MYCLI_DIR}/config/vimrc"
+
+
+#################################################
+# Create import for gitconfig
+#################################################
+
+if [[ $(git config --global include.path) ]]; then
+   echo "WARNING: It appears that the git config already has a include, taking no action"
+else
+   echo "INFO: Adding include to global git config"
+   git config --global include.path "${MYCLI_DIR}/config/gitconfig"
+fi
