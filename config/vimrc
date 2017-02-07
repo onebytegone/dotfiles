@@ -1,7 +1,4 @@
 set smartindent
-set tabstop=3
-set shiftwidth=3
-set expandtab
 autocmd BufWritePre * :%s/\s\+$//e
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
@@ -9,3 +6,17 @@ set number
 highlight LineNr ctermfg=darkgrey
 syntax on
 
+" indentation settings: http://vim.wikia.com/wiki/Indenting_source_code
+" NOTE: using larger tabstop to see when there are tabs that shouldn't exist
+set expandtab
+set tabstop=8
+set shiftwidth=3
+set softtabstop=3
+set autoindent
+set smartindent
+set ignorecase
+
+" Paste Toggle (http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste)
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
