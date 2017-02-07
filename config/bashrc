@@ -11,6 +11,12 @@ parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 #####################
 
 source $parent_path/../scripts/collector.bash
+source $parent_path/../aliases
+
+# Import local bash config (~/.bash_local)
+if [ -f ~/.bash_local ]; then
+   source ~/.bash_local
+fi
 
 
 #####################

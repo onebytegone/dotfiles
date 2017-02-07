@@ -1,0 +1,6 @@
+# bash Aliases
+# ---
+
+# `mark` >> Print a multiline delimiter with the current time
+
+alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && date +'%Y-%m-%d %H:%M:%S' && printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo"
