@@ -25,6 +25,7 @@ function create_config_link {
 }
 
 create_config_link "${HOME_DIR}/.vimrc" "${MYCLI_DIR}/config/vimrc"
+create_config_link "${HOME_DIR}/.tmux.conf" "${MYCLI_DIR}/config/tmux"
 
 
 #################################################
