@@ -14,10 +14,5 @@ git clone https://github.com/onebytegone/mycli.git .mycli
 
 ```
 cd .mycli
-./setup.py
+./setup.sh
 ```
-
-_to be automated_
-
-  * auto setup
-  * all items menu items
