@@ -37,3 +37,18 @@ else
    echo "INFO: Adding include to global git config"
    git config --global include.path "${MYCLI_DIR}/config/gitconfig"
 fi
+
+
+#################################################
+# Create `source` link for bash config
+#################################################
+
+BASH_INCLUDE="source \"${MYCLI_DIR}/config/bashrc\""
+BASH_PROFILE="${HOME_DIR}/.bash_profile"
+
+if grep -q "${BASH_INCLUDE}" "${BASH_PROFILE}"; then
+   echo "WARNING: It appears that the bash_profile config has already been linked, taking no action"
+else
+   echo "INFO: Adding include for bash config"
+   echo "${BASH_INCLUDE}" >> "${BASH_PROFILE}"
+fi
