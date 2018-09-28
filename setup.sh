@@ -24,6 +24,7 @@ function create_config_link {
    fi
 }
 
+create_config_link "${HOME_DIR}/.inputrc" "${REPO_PATH}/config/inputrc"
 create_config_link "${HOME_DIR}/.vimrc" "${REPO_PATH}/config/vim/vimrc"
 create_config_link "${HOME_DIR}/.tmux.conf" "${REPO_PATH}/config/tmux"
 
