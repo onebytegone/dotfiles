@@ -27,6 +27,9 @@ set autoindent
 set smartindent
 set ignorecase
 
+" disable double space after period when using `gq`
+set nojoinspaces
+
 " make "backspace" work consistently
 " http://vim.wikia.com/wiki/Backspace_and_delete_problems#Backspace_key_won.27t_move_from_current_line
 set backspace=indent,eol,start
