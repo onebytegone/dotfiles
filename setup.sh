@@ -1,10 +1,10 @@
 #!/bin/bash
 
 HOME_DIR=$(echo ~)
-MYCLI_DIR=$(cd `dirname $0` && pwd)
+REPO_PATH=$(cd `dirname $0` && pwd)
 
 echo "STARTUP: Setting up config in: ${HOME_DIR}"
-echo "STARTUP: Will link to: ${MYCLI_DIR}"
+echo "STARTUP: Will link to: ${REPO_PATH}"
 
 #################################################
 # Create symlinks for config
@@ -24,8 +24,9 @@ function create_config_link {
    fi
 }
 
-create_config_link "${HOME_DIR}/.vimrc" "${MYCLI_DIR}/config/vimrc"
-create_config_link "${HOME_DIR}/.tmux.conf" "${MYCLI_DIR}/config/tmux"
+create_config_link "${HOME_DIR}/.inputrc" "${REPO_PATH}/config/inputrc"
+create_config_link "${HOME_DIR}/.vimrc" "${REPO_PATH}/config/vim/vimrc"
+create_config_link "${HOME_DIR}/.tmux.conf" "${REPO_PATH}/config/tmux"
 
 
 #################################################
@@ -36,7 +37,7 @@ if [[ $(git config --global include.path) ]]; then
    echo "WARNING: It appears that the git config already has a include, taking no action"
 else
    echo "INFO: Adding include to global git config"
-   git config --global include.path "${MYCLI_DIR}/config/gitconfig"
+   git config --global include.path "${REPO_PATH}/config/gitconfig"
 fi
 
 
@@ -44,11 +45,11 @@ fi
 # Create `source` link for bash config
 #################################################
 
-BASH_INCLUDE="source \"${MYCLI_DIR}/config/bashrc\""
+BASH_INCLUDE="source \"${REPO_PATH}/config/bash/bashrc\""
 BASH_PROFILE="${HOME_DIR}/.bash_profile"
 
 if grep -q "${BASH_INCLUDE}" "${BASH_PROFILE}"; then
-   echo "WARNING: It appears that the bash_profile config has already been linked, taking no action"
+   echo "WARNING: It appears that the bash config has already been linked, taking no action"
 else
    echo "INFO: Adding include for bash config"
    echo "${BASH_INCLUDE}" >> "${BASH_PROFILE}"

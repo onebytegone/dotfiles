@@ -5,13 +5,38 @@
 platform=`uname | awk '{print tolower($0)}'`
 parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 
+set -o vi
+
+
+#####################
+# Prompt
+#####################
+
+function timer_start {
+   timer=${timer:-$SECONDS}
+}
+
+function timer_stop {
+  timer_show=$(($SECONDS - $timer))
+  unset timer
+}
+
+function prompt {
+   timer_stop
+   echo "[last: $?; ${timer_show}s] ($(date))"
+   echo "$(whoami)@$(hostname):$(pwd)"
+}
+
+trap 'timer_start' DEBUG
+export PS1=' $ '
+PROMPT_COMMAND='prompt'
+
 
 #####################
 # Links
 #####################
 
-source $parent_path/../scripts/collector.bash
-source $parent_path/../aliases
+source $parent_path/aliases
 
 # Import local bash config (~/.bash_local)
 if [ -f ~/.bash_local ]; then
@@ -56,3 +81,11 @@ HISTSIZE=10000
 HISTFILESIZE=400000
 
 shopt -s histappend
+
+
+#####################
+# Autocomplete
+#####################
+
+bind "TAB:menu-complete"
+bind "set show-all-if-ambiguous on"

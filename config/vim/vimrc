@@ -1,0 +1,40 @@
+" coloring
+set background=dark
+syntax enable
+
+" show misspelled words
+set spell spelllang=en_us
+hi SpellBad ctermbg=88
+
+" show trailing whitesace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+
+" remove trailing whitespace on save
+autocmd BufWritePre * :%s/\s\+$//e
+
+" line numbers
+set number
+highlight LineNr ctermfg=darkgrey
+
+" indentation settings: http://vim.wikia.com/wiki/Indenting_source_code
+" NOTE: using larger tabstop to see when there are tabs that shouldn't exist
+set expandtab
+set tabstop=8
+set shiftwidth=3
+set softtabstop=3
+set autoindent
+set smartindent
+set ignorecase
+
+" disable double space after period when using `gq`
+set nojoinspaces
+
+" make "backspace" work consistently
+" http://vim.wikia.com/wiki/Backspace_and_delete_problems#Backspace_key_won.27t_move_from_current_line
+set backspace=indent,eol,start
+
+" paste toggle (http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste)
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode

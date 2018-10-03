@@ -1,5 +1,12 @@
 # TMUX config
 
+# Make pbcopy work (Source: https://evertpot.com/osx-tmux-vim-copy-paste-clipboard/)
+set-option -g default-command "reattach-to-user-namespace -l bash"
+
+# Open new panes with path set to current path (Source: https://evertpot.com/osx-tmux-vim-copy-paste-clipboard/)
+bind '"' split-window -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+
 ############################################################################
 # Theme
 ############################################################################
@@ -31,7 +38,14 @@ set-option -g history-limit 10000
 # Bindings
 ############################################################################
 
-bind-key -n C-K resize-pane -U 5
-bind-key -n C-J resize-pane -D 5
-bind-key -n C-H resize-pane -L 5
-bind-key -n C-L resize-pane -R 5
+# Prefix, ctrl + <letter>
+bind-key -r C-K resize-pane -U 5
+bind-key -r C-J resize-pane -D 5
+bind-key -r C-H resize-pane -L 5
+bind-key -r C-L resize-pane -R 5
+
+# vi navigation for panes
+bind-key h select-pane -L
+bind-key j select-pane -D
+bind-key k select-pane -U
+bind-key l select-pane -R
