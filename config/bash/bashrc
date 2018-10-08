@@ -22,8 +22,9 @@ function timer_stop {
 }
 
 function prompt {
+   exit_code=$?
    timer_stop
-   echo "[last: $?; ${timer_show}s] ($(date))"
+   echo "[last: ${exit_code}; ${timer_show}s] ($(date))"
    echo "$(whoami)@$(hostname):$(pwd)"
 }
 
