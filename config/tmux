@@ -38,6 +38,10 @@ set-option -g history-limit 10000
 # Bindings
 ############################################################################
 
+# Remap "prefix" to be "ctrl + a"
+unbind C-b
+set -g prefix C-a
+
 # Prefix, ctrl + <letter>
 bind-key -r C-K resize-pane -U 5
 bind-key -r C-J resize-pane -D 5
