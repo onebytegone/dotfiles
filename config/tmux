@@ -19,6 +19,9 @@ set -g pane-border-bg colour234
 set -g pane-active-border-fg colour240
 set -g pane-active-border-bg colour234
 
+set -g status-right-length 60
+set -g status-right ' #{=21:pane_title} %F %H:%M (#(date -u +"%%F %%H:%%M"))'
+
 
 ############################################################################
 # Mouse support
