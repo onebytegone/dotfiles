@@ -11,3 +11,9 @@ alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && 
 alias gf="git fetch --all"
 alias gpff="git pull --ff-only"
 alias gplff=gpff
+
+
+# > AWS Aliases
+
+alias unsetAWS='unset $(env | grep AWS | grep -v AWS_REGION | grep -v AWS_DEFAULT_REGION | sed '\''s|=.*||'\'')'
+alias whoami-aws='aws sts get-caller-identity'
