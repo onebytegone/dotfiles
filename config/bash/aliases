@@ -1,6 +1,14 @@
 # bash Aliases
 # ---
 
+# `ttlrepo` >> Set window title to name of current repo
+
+ttlrepo() {
+   REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
+   echo -e "\033k${REPO_NAME}\033\\"
+}
+
+
 # `mark` >> Print a multiline delimiter with the current time
 
 alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && date +'%Y-%m-%d %H:%M:%S' && printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo"
