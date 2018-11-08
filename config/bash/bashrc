@@ -43,6 +43,7 @@ PROMPT_COMMAND='prompt'
 #####################
 
 source $parent_path/aliases
+source $parent_path/completion/git-completion.bash
 
 # Import local bash config (~/.bash_local)
 if [ -f ~/.bash_local ]; then
