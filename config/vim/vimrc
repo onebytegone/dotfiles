@@ -13,8 +13,10 @@ hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=red
 " - GUI: undercurl in blue
 hi SpellCap term=reverse cterm=underline ctermbg=6 gui=undercurl guisp=blue
 
-" show trailing whitesace
-highlight ExtraWhitespace ctermbg=red guibg=red
+" show trailing whitespace
+" - non-color terminals: reverse the text and background "colors"
+" - color terminals and GUI: set the background to red
+highlight ExtraWhitespace term=reverse ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 
 " remove trailing whitespace on save
