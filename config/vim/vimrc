@@ -3,8 +3,15 @@ set background=dark
 syntax enable
 
 " show misspelled words
-set spell spelllang=en_us
-hi SpellBad ctermbg=88
+set spell spelllang=en
+" - non-color terminals: reverse the text and background "colors"
+" - color terminals: set the background to red
+" - GUI: undercurl in red
+hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=red
+" - non-color terminals: reverse the text and background "colors"
+" - color terminals: set the background to blue
+" - GUI: undercurl in blue
+hi SpellCap term=reverse cterm=underline ctermbg=6 gui=undercurl guisp=blue
 
 " show trailing whitesace
 highlight ExtraWhitespace ctermbg=red guibg=red
