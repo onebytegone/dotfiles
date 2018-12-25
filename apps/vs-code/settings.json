@@ -2,9 +2,13 @@
     "telemetry.enableTelemetry": false,
     "editor.tabSize": 3,
     "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
     "files.eol": "\n",
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
-    "files.encoding": "utf8"
+    "files.encoding": "utf8",
+    "[yaml]": {
+      "editor.tabSize": 3,
+    }
 }
