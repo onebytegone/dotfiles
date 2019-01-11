@@ -8,10 +8,37 @@ ttlrepo() {
    echo -e "\033k${REPO_NAME}\033\\"
 }
 
-
 # `mark` >> Print a multiline delimiter with the current time
 
 alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && date +'%Y-%m-%d %H:%M:%S' && printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo"
+
+# `fixssh` >> Flip flops the value of SSH_AUTH_SOCK. Fixes issues when
+# reattaching to a TMUX session where you are forwarding ssh keys or using
+# local agent after detaching a remote client.
+
+fixssh() {
+   SESSIONSOCKET=$(tmux showenv SSH_AUTH_SOCK | sed -E 's/.*=//')
+   GLOBALSOCKET=$(tmux showenv -g SSH_AUTH_SOCK | sed -E 's/.*=//')
+   echo "Current: ${SSH_AUTH_SOCK}"
+   echo "Session: ${SESSIONSOCKET}"
+   echo "Global:  ${GLOBALSOCKET}"
+   echo '---'
+
+   if [ "${SSH_AUTH_SOCK}" = ${SESSIONSOCKET} ]; then
+      echo 'Switching to value from global SSH_AUTH_SOCK'
+      export SSH_AUTH_SOCK="${GLOBALSOCKET}"
+   else
+      echo "Switching to value from session's SSH_AUTH_SOCK"
+      export SSH_AUTH_SOCK="${SESSIONSOCKET}"
+   fi
+
+   echo "SSH_AUTH_SOCK is now: ${SSH_AUTH_SOCK}"
+
+   if [ ! -e ${SSH_AUTH_SOCK} ]; then
+      echo '---'
+      echo "ERROR: ${SSH_AUTH_SOCK} does not exist"
+   fi
+}
 
 
 # > git Aliases
