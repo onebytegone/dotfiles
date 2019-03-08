@@ -1,6 +1,7 @@
 {
     "telemetry.enableTelemetry": false,
     "editor.tabSize": 3,
+    "editor.rulers": [ 90, 120 ],
     "editor.detectIndentation": false,
     "editor.insertSpaces": true,
     "files.eol": "\n",
@@ -8,7 +9,13 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "files.encoding": "utf8",
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.statusBar.feedback.visible": false,
+    "workbench.tree.indent": 20
     "[yaml]": {
       "editor.tabSize": 3,
-    }
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "rewrap.wrappingColumn": 90,
+    "rewrap.wholeComment": false,
 }
