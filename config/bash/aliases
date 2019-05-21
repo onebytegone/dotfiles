@@ -47,6 +47,16 @@ alias gf="git fetch --all"
 alias gpff="git pull --ff-only"
 alias gplff=gpff
 
+function proxy_git {
+   # Add "username branch", i.e. `git ub branch-name` -> `git checkout -b $(whoami)/branch-name`
+      if [ $1 = "ub" ]; then
+         \git checkout -b "$(whoami)/${2}" ${@:3}
+      else
+         \git "$@"
+      fi
+}
+
+alias git="proxy_git"
 
 # > AWS Aliases
 
