@@ -16,6 +16,8 @@ function create_config_link {
    echo "INFO: Linking: ${CONFIG_FILE}"
    if [ -h $CONFIG_FILE ]; then
       echo "WARNING: '${CONFIG_FILE}' already seems to be symlinked, taking no action."
+   elif [ -d $CONFIG_FILE ]; then
+      echo "ERROR: A config directory already exists at '${CONFIG_FILE}', taking no action."
    elif [ -f $CONFIG_FILE ]; then
       echo "ERROR: A config file already exists at '${CONFIG_FILE}', taking no action."
    else
@@ -26,6 +28,7 @@ function create_config_link {
 
 create_config_link "${HOME_DIR}/.inputrc" "${REPO_PATH}/config/inputrc"
 create_config_link "${HOME_DIR}/.vimrc" "${REPO_PATH}/config/vim/vimrc"
+create_config_link "${HOME_DIR}/.vim" "${REPO_PATH}/config/vim/vim"
 create_config_link "${HOME_DIR}/.tmux.conf" "${REPO_PATH}/config/tmux"
 
 
