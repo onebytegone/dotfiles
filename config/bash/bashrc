@@ -81,7 +81,7 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 
 #####################
-# Increase history
+# History
 #####################
 
 HISTSIZE=10000
@@ -89,6 +89,7 @@ HISTFILESIZE=400000
 
 shopt -s histappend
 
+export HISTCONTROL=ignoredups
 
 #####################
 # Autocomplete
