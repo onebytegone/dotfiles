@@ -48,12 +48,19 @@ alias gpff="git pull --ff-only"
 alias gplff=gpff
 
 function proxy_git {
-   # Add "username branch", i.e. `git ub branch-name` -> `git checkout -b $(whoami)/branch-name`
-      if [ $1 = "ub" ]; then
-         \git checkout -b "$(whoami)/${2}" ${@:3}
-      else
-         \git "$@"
+   if [ $1 = "ub" ]; then
+      # Add "username branch", i.e. `git ub branch-name` -> `git checkout -b $(whoami)/branch-name`
+      \git checkout -b "$(whoami)/${2}" ${@:3}
+   elif [ $1 = "dnm" ]; then
+      # Add "do not merge" shortcut, i.e. `git dnm [message]`
+      COMMIT_MESSAGE='DO NOT MERGE'
+      if [ -n "${2}" ]; then
+         COMMIT_MESSAGE="${COMMIT_MESSAGE}: ${2}"
       fi
+      \git commit -a -m "${COMMIT_MESSAGE}"
+   else
+      \git "$@"
+   fi
 }
 
 alias git="proxy_git"
