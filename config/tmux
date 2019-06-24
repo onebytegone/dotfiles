@@ -11,13 +11,9 @@ bind % split-window -h -c "#{pane_current_path}"
 # Theme
 ############################################################################
 
-set -g status-fg colour247
-set -g status-bg colour234
-
-set -g pane-border-fg colour234
-set -g pane-border-bg colour234
-set -g pane-active-border-fg colour240
-set -g pane-active-border-bg colour234
+set -g status-style fg=colour247,bg=colour234
+set -g pane-border-style fg=colour234,bg=colour234
+set -g pane-active-border-style fg=colour240,bg=colour234
 
 set -g status-right-length 60
 set -g status-right ' #{=21:pane_title} %F %H:%M (#(date -u +"%%F %%H:%%M"))'
