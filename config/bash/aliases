@@ -69,3 +69,13 @@ alias git="proxy_git"
 
 alias unsetAWS='unset $(env | grep AWS | grep -v AWS_REGION | grep -v AWS_DEFAULT_REGION | sed '\''s|=.*||'\'')'
 alias whoami-aws='aws sts get-caller-identity'
+
+
+# > serverless Aliases
+
+function slsDeployAndTail {
+   FUNCTION_NAME=$1
+   EXTRA_PARAMS=${@:2}
+   sls deploy function -f "${FUNCTION_NAME}" $EXTRA_PARAMS \
+      && sls logs -f "${FUNCTION_NAME}" -t $EXTRA_PARAMS
+}
