@@ -65,6 +65,7 @@ function proxy_git {
 
 alias git="proxy_git"
 
+
 # > AWS Aliases
 
 alias unsetAWS='unset $(env | grep AWS | grep -v AWS_REGION | grep -v AWS_DEFAULT_REGION | sed '\''s|=.*||'\'')'
