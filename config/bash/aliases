@@ -65,6 +65,33 @@ function proxy_git {
 
 alias git="proxy_git"
 
+function delete_merged_branches {
+   UPSTREAM_BRANCH=$1
+   if [ -z "${UPSTREAM_BRANCH}" ]; then
+      echo "ERROR an upstream branch must be supplied. e.g. delete_merged_branches 'master'"
+      return
+   fi
+
+   echo "Finding branches merged into ${UPSTREAM_BRANCH}"
+   for BRANCH in $(git branch --merged ${UPSTREAM_BRANCH} | grep -v "\*\|${UPSTREAM_BRANCH}"); do
+      git log -n 1 "${BRANCH}"
+      while true; do
+         read -p "Delete ${BRANCH}? " yn
+         case $yn in
+            [Yy]*)
+               git branch -d "${BRANCH}"
+               break
+               ;;
+            [Nn]*)
+               break
+               ;;
+            *)
+               echo "Please answer yes or no"
+               ;;
+         esac
+      done
+   done
+}
 
 # > AWS Aliases
 
