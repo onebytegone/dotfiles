@@ -26,6 +26,10 @@ autocmd BufWritePre * :%s/\s\+$//e
 set number
 highlight LineNr ctermfg=darkgrey
 
+" word wrap columns
+set colorcolumn=90,140
+highlight ColorColumn ctermbg=darkgrey
+
 " indentation settings: http://vim.wikia.com/wiki/Indenting_source_code
 " NOTE: using larger tabstop to see when there are tabs that shouldn't exist
 set expandtab
