@@ -100,6 +100,7 @@ function delete_merged_branches {
 function assume-role {
    eval $("${source_dir}/scripts/aws-assume-role.sh" ${@:1})
 }
+. "${source_dir}/scripts/aws-assume-role-completion.bash"
 
 alias unsetAWS='unset $(env | grep AWS | grep -v AWS_REGION | grep -v AWS_DEFAULT_REGION | sed '\''s|=.*||'\'')'
 alias whoami-aws='aws sts get-caller-identity'
