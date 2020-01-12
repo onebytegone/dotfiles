@@ -1,6 +1,8 @@
 # bash Aliases
 # ---
 
+source_dir=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
+
 # `ttlrepo` >> Set window title to name of current repo
 
 ttlrepo() {
@@ -96,7 +98,7 @@ function delete_merged_branches {
 # > AWS Aliases
 
 function assume-role {
-   eval $(~/dotfiles/config/bash/scripts/aws-assume-role.sh ${@:1})
+   eval $("${source_dir}/scripts/aws-assume-role.sh" ${@:1})
 }
 
 alias unsetAWS='unset $(env | grep AWS | grep -v AWS_REGION | grep -v AWS_DEFAULT_REGION | sed '\''s|=.*||'\'')'
