@@ -1,0 +1,13 @@
+{
+   "detect_indentation": false,
+   "ensure_newline_at_eof_on_save": true,
+   "font_size": 14,
+   "indent_guide_options": [
+      "draw_normal",
+      "draw_active"
+   ],
+   "tab_size": 3,
+   "translate_tabs_to_spaces": true,
+   "trim_trailing_white_space_on_save": true,
+   "wrap_width": 120
+}
