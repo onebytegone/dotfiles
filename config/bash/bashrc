@@ -31,6 +31,7 @@ function prompt {
    timer_stop
    echo "[last: ${exit_code}; ${timer_show}s] ($(date))"
    echo "$(whoami)@$(hostname):$(pwd)"
+   history -a
 }
 
 trap 'timer_start' DEBUG
