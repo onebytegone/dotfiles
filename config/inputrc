@@ -1,2 +1,8 @@
 set editing-mode vi
 set show-mode-in-prompt on
+
+$if mode=vi
+   set keymap vi-command
+   "\e\e[D": backward-word
+   "\e\e[C": forward-word
+$endif
