@@ -16,7 +16,7 @@ set -g pane-border-style fg=colour234,bg=colour234
 set -g pane-active-border-style fg=colour240,bg=colour234
 
 set -g status-right-length 60
-set -g status-right ' #{=21:pane_title} %F %H:%M (#(date -u +"%%F %%H:%%M"))'
+set -g status-right ' #{=32:pane_title} %F %H:%M (#(date -u +"%%F %%H:%%M"))'
 
 
 ############################################################################
@@ -24,6 +24,7 @@ set -g status-right ' #{=21:pane_title} %F %H:%M (#(date -u +"%%F %%H:%%M"))'
 ############################################################################
 
 set-option -g history-limit 10000
+set-option -g set-titles on
 
 
 ############################################################################
