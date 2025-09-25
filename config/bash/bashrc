@@ -86,8 +86,8 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 # History
 #####################
 
-export HISTSIZE=10000
-export HISTFILESIZE=400000
+export HISTSIZE=50000
+export HISTFILESIZE=1000000
 
 shopt -s histappend
 
