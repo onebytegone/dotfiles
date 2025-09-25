@@ -14,6 +14,18 @@ ttlrepo() {
 
 alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && date +'%Y-%m-%d %H:%M:%S' && printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo"
 
+# `bell` >> Play a terminal bell 5 times
+
+alias bell='for I in $(seq 1 5); do printf "\a"; sleep 0.4; done'
+
+# `pbenv <NAME>` >> Export pasteboard contents to an environment variable
+
+pbenv() {
+   VALUE=$(pbpaste)
+   echo -e "\033[1;30m$1=${VALUE//?/*} ($(echo -n "${VALUE}" | wc -c) chars)\033[0m"
+   export "$1"="$(pbpaste)"
+}
+
 # `fixssh` >> Flip flops the value of SSH_AUTH_SOCK. Fixes issues when
 # reattaching to a TMUX session where you are forwarding ssh keys or using
 # local agent after detaching a remote client.
@@ -49,6 +61,7 @@ alias gt="git status"
 alias gf="git fetch --all"
 alias gpff="git pull --ff-only"
 alias gplff=gpff
+alias gcf='git commit --fixup'
 
 function proxy_git {
    if [ $1 = "ub" ]; then
