@@ -26,13 +26,56 @@ function timer_stop {
   unset timer
 }
 
+_last_state=""
+
+function _set_iterm_tab_color {
+   local current_dir="$PWD"
+   local search_dir="$current_dir"
+
+   while [ "$search_dir" != "/" ]; do
+      if [ -f "$search_dir/.vscode/settings.json" ]; then
+         local color=$(grep -o '"titleBar.activeBackground"[[:space:]]*:[[:space:]]*"[^"]*"' "$search_dir/.vscode/settings.json" 2>/dev/null | sed 's/.*"#\([^"]*\)".*/\1/')
+         if [ -n "$color" ]; then
+            local r=$((16#${color:0:2}))
+            local g=$((16#${color:2:2}))
+            local b=$((16#${color:4:2}))
+            echo -ne "\033]6;1;bg;red;brightness;$r\007"
+            echo -ne "\033]6;1;bg;green;brightness;$g\007"
+            echo -ne "\033]6;1;bg;blue;brightness;$b\007"
+            return
+         fi
+      fi
+      search_dir=$(dirname "$search_dir")
+   done
+
+   echo -ne "\033]6;1;bg;*;default\007"
+}
+
 function prompt {
    exit_code=$?
    timer_stop
    echo "[last: ${exit_code}; ${timer_show}s] ($(date))"
    echo "$(whoami)@$(hostname):$(pwd)"
    history -a
-   echo -ne "\033]0;$(basename $(git rev-parse --show-toplevel 2>/dev/null || echo -n '') 2>/dev/null)\007"
+
+   local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+   local current_state="$PWD:$branch"
+
+   if [ "$current_state" != "$_last_state" ]; then
+      local repo_name=$(basename $(git rev-parse --show-toplevel 2>/dev/null || echo -n '') 2>/dev/null)
+      local title="$repo_name"
+      if [ -n "$branch" ]; then
+         title="$repo_name [$branch]"
+      fi
+      echo -ne "\033]0;$title\007"
+
+      local last_pwd="${_last_state%%:*}"
+      if [ "$PWD" != "$last_pwd" ]; then
+         _set_iterm_tab_color
+      fi
+
+      _last_state="$current_state"
+   fi
 }
 
 trap 'timer_start' DEBUG
