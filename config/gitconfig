@@ -6,3 +6,7 @@
    plff = pull --ff-only
 [core]
    editor = vim
+[rebase]
+   autoSquash = true
+[init]
+   defaultBranch = master
