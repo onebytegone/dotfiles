@@ -26,6 +26,20 @@ pbenv() {
    export "$1"="$(pbpaste)"
 }
 
+# > File comparison
+
+function lhs {
+   comm -23 <(sort "$1") <(sort "$2")
+}
+
+function rhs {
+   comm -13 <(sort "$1") <(sort "$2")
+}
+
+function intersect {
+   comm -12 <(sort "$1") <(sort "$2")
+}
+
 # `fixssh` >> Flip flops the value of SSH_AUTH_SOCK. Fixes issues when
 # reattaching to a TMUX session where you are forwarding ssh keys or using
 # local agent after detaching a remote client.
