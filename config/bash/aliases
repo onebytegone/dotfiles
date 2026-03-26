@@ -14,6 +14,14 @@ ttlrepo() {
 
 alias mark="printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo && date +'%Y-%m-%d %H:%M:%S' && printf '=%.0s' {0..80} && echo && printf '=%.0s' {0..80} && echo"
 
+# `lowercase` >> Convert stdin to lowercase
+
+alias lowercase="tr '[:upper:]' '[:lower:]'"
+
+# `uppercase` >> Convert stdin to uppercase
+
+alias uppercase="tr '[:lower:]' '[:upper:]'"
+
 # `bell` >> Play a terminal bell 5 times
 
 alias bell='for I in $(seq 1 5); do printf "\a"; sleep 0.4; done'
