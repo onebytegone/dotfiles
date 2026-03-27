@@ -131,6 +131,25 @@ function delete_merged_branches {
    done
 }
 
+# `worktree <branch>` >> Create a git worktree one level up with synced files
+
+function worktree {
+   eval $("${source_dir}/scripts/worktree.sh" ${1})
+}
+
+# `prunetree <branch>` >> Remove a git worktree, prompting if there are uncommitted changes
+
+function prunetree {
+   eval $("${source_dir}/scripts/prunetree.sh" ${1})
+}
+. "${source_dir}/scripts/prunetree-completion.bash"
+
+# `bash-archive <search>` >> Grep through bash history archive
+
+function bash-archive {
+   grep "${1}" ~/.bash_history_archive
+}
+
 # > AWS Aliases
 
 function assume-role {
