@@ -34,6 +34,10 @@ pbenv() {
    export "$1"="$(pbpaste)"
 }
 
+# Reset CC Task list
+
+alias clear-claude-tasklist='rm ~/.claude-shared/activity/*.json'
+
 # > File comparison
 
 function lhs {
@@ -75,7 +79,6 @@ fixssh() {
       echo "ERROR: ${SSH_AUTH_SOCK} does not exist"
    fi
 }
-
 
 # > git Aliases
 
@@ -168,4 +171,36 @@ function slsDeployAndTail {
    EXTRA_PARAMS=${@:2}
    sls deploy function -f "${FUNCTION_NAME}" $EXTRA_PARAMS \
       && sls logs -f "${FUNCTION_NAME}" -t $EXTRA_PARAMS
+}
+
+# `amux` >> Launch or reattach a tmux dev session with two side-by-side panes
+
+function amux {
+   DIR_NAME=$(basename "$(pwd)")
+   DIR_HASH=$(echo -n "$(pwd)" | md5 | head -c 4)
+   SESSION_NAME="${DIR_NAME}-${DIR_HASH}"
+
+   if tmux has-session -t "${SESSION_NAME}" 2>/dev/null; then
+      if [ -n "${TMUX}" ]; then
+         tmux switch-client -t "${SESSION_NAME}"
+      else
+         tmux attach-session -t "${SESSION_NAME}"
+      fi
+   else
+      tmux new-session -d -s "${SESSION_NAME}" -c "$(pwd)"
+      tmux split-window -h -t "${SESSION_NAME}" -c "$(pwd)"
+      tmux send-keys -t "${SESSION_NAME}:0.0" 'conch run' C-m
+      tmux select-pane -t "${SESSION_NAME}:0.0"
+      if [ -n "${TMUX}" ]; then
+         tmux switch-client -t "${SESSION_NAME}"
+      else
+         tmux attach-session -t "${SESSION_NAME}"
+      fi
+   fi
+}
+
+# `devbox` >> Spawn the current directory as a sandboxed container with Claude Code
+
+function devbox {
+   node "${source_dir}/scripts/devbox/devbox.mjs"
 }
