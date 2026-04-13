@@ -236,6 +236,12 @@ function amux-tree {
    fi
 }
 
+# `speak <file>` >> Read a file aloud using macOS text-to-speech
+
+function speak {
+   cat "$1" | say -r 400 -i
+}
+
 # `devbox` >> Spawn the current directory as a sandboxed container with Claude Code
 
 function devbox {
