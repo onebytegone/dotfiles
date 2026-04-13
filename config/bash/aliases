@@ -199,6 +199,43 @@ function amux {
    fi
 }
 
+# `amux-tree <branch>` >> Create a worktree and launch a tmux session with conch + vim GOAL.md
+
+function amux-tree {
+   local BRANCH="${1%/}"
+
+   if [ -z "${BRANCH}" ]; then
+      echo "Usage: amux-tree <branch-name>" >&2
+      return 1
+   fi
+
+   # Create the worktree (discard eval output; it handles
+   # checkout and file sync in the background)
+   "${source_dir}/scripts/worktree.sh" "${BRANCH}" >/dev/null
+
+   local PARENT_DIR=$("${source_dir}/scripts/find-worktree-root.sh")
+   local FOLDER_NAME="${BRANCH//\//_}"
+   local WORKTREE_PATH="${PARENT_DIR}/${FOLDER_NAME}"
+   local SYNC_LOG="${WORKTREE_PATH}/.worktree-sync.log"
+
+   local DIR_NAME=$(basename "${WORKTREE_PATH}")
+   local DIR_HASH=$(echo -n "${WORKTREE_PATH}" | md5 | head -c 4)
+   local SESSION_NAME="${DIR_NAME}-${DIR_HASH}"
+
+   tmux new-session -d -s "${SESSION_NAME}" -c "${WORKTREE_PATH}"
+   tmux split-window -h -t "${SESSION_NAME}" -c "${WORKTREE_PATH}"
+   tmux send-keys -t "${SESSION_NAME}:0.0" 'conch run' C-m
+   tmux send-keys -t "${SESSION_NAME}:0.1" \
+      "vim GOAL.md && cat \"${SYNC_LOG}\"" C-m
+   tmux select-pane -t "${SESSION_NAME}:0.1"
+
+   if [ -n "${TMUX}" ]; then
+      tmux switch-client -t "${SESSION_NAME}"
+   else
+      tmux attach-session -t "${SESSION_NAME}"
+   fi
+}
+
 # `devbox` >> Spawn the current directory as a sandboxed container with Claude Code
 
 function devbox {
