@@ -58,4 +58,5 @@ SYNC_LOG="${WORKTREE_PATH}/.worktree-sync.log"
    fi
 ) >"${SYNC_LOG}" 2>&1 &
 
+touch "${WORKTREE_PATH}"
 echo "cd \"${WORKTREE_PATH}\" && vim GOAL.md && cat \"${SYNC_LOG}\""
