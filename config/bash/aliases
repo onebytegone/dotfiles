@@ -173,44 +173,115 @@ function slsDeployAndTail {
       && sls logs -f "${FUNCTION_NAME}" -t $EXTRA_PARAMS
 }
 
-# `amux` >> Launch or reattach a tmux dev session with two side-by-side panes
+# `_amux_send_initial_prompt` >> Wait for conch boot, then type+submit a prompt in the target pane
+
+_amux_send_initial_prompt() {
+   local TARGET="${1}:${2}"
+   local PROMPT="${3}"
+   local MARKER="${AMUX_PROMPT_READY_MARKER:-Initializing firewall...}"
+   local SETTLE="${AMUX_PROMPT_SETTLE_SECONDS:-5}"
+   local DEADLINE=$(( $(date +%s) + 300 ))
+
+   while [ "$(date +%s)" -lt "${DEADLINE}" ]; do
+      if tmux capture-pane -p -t "${TARGET}" | grep -qF -- "${MARKER}"; then
+         sleep "${SETTLE}"
+         tmux send-keys -t "${TARGET}" -l -- "${PROMPT}"
+         tmux send-keys -t "${TARGET}" Enter
+         return 0
+      fi
+      sleep 0.25
+   done
+}
+
+# `amux [-p PROMPT] [-- CONCH_ARGS...]` >> Launch or reattach a tmux dev session with two side-by-side panes
 
 function amux {
-   DIR_NAME=$(basename "$(pwd)")
-   DIR_HASH=$(echo -n "$(pwd)" | md5 | head -c 4)
-   SESSION_NAME="${DIR_NAME}-${DIR_HASH}"
+   local PROMPT=""
+   local CONCH_ARGS=()
+
+   while [ $# -gt 0 ]; do
+      case "$1" in
+         -p)
+            PROMPT="$2"
+            shift 2
+            ;;
+         --)
+            shift
+            CONCH_ARGS=("$@")
+            break
+            ;;
+         *)
+            echo "Usage: amux [-p PROMPT] [-- CONCH_ARGS...]" >&2
+            return 1
+            ;;
+      esac
+   done
+
+   local DIR_NAME=$(basename "$(pwd)")
+   local DIR_HASH=$(echo -n "$(pwd)" | md5 | head -c 4)
+   local SESSION_NAME="${DIR_NAME}-${DIR_HASH}"
 
    if tmux has-session -t "${SESSION_NAME}" 2>/dev/null; then
+      if [ -n "${PROMPT}" ]; then
+         echo "amux: session '${SESSION_NAME}' already exists; refusing to send -p prompt to a running conch" >&2
+         return 1
+      fi
       if [ -n "${TMUX}" ]; then
          tmux switch-client -t "${SESSION_NAME}"
       else
          tmux attach-session -t "${SESSION_NAME}"
       fi
+      return 0
+   fi
+
+   tmux new-session -d -s "${SESSION_NAME}" -c "$(pwd)"
+   tmux split-window -h -t "${SESSION_NAME}" -c "$(pwd)"
+   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run ${CONCH_ARGS[*]}" C-m
+   tmux select-pane -t "${SESSION_NAME}:0.0"
+
+   if [ -n "${PROMPT}" ]; then
+      _amux_send_initial_prompt "${SESSION_NAME}" "0.0" "${PROMPT}" &
+   fi
+
+   if [ -n "${TMUX}" ]; then
+      tmux switch-client -t "${SESSION_NAME}"
    else
-      tmux new-session -d -s "${SESSION_NAME}" -c "$(pwd)"
-      tmux split-window -h -t "${SESSION_NAME}" -c "$(pwd)"
-      tmux send-keys -t "${SESSION_NAME}:0.0" 'conch run' C-m
-      tmux select-pane -t "${SESSION_NAME}:0.0"
-      if [ -n "${TMUX}" ]; then
-         tmux switch-client -t "${SESSION_NAME}"
-      else
-         tmux attach-session -t "${SESSION_NAME}"
-      fi
+      tmux attach-session -t "${SESSION_NAME}"
    fi
 }
 
-# `amux-tree <branch>` >> Create a worktree and launch a tmux session with conch + vim GOAL.md
+# `amux-tree <branch> [-p PROMPT] [-- CONCH_ARGS...]` >> Create a worktree and launch a tmux session with conch + (vim GOAL.md or auto-prompt)
 
 function amux-tree {
    local BRANCH="${1%/}"
 
    if [ -z "${BRANCH}" ]; then
-      echo "Usage: amux-tree <branch-name>" >&2
+      echo "Usage: amux-tree <branch-name> [-p PROMPT] [-- CONCH_ARGS...]" >&2
       return 1
    fi
+   shift
 
-   # Create the worktree (discard eval output; it handles
-   # checkout and file sync in the background)
+   local PROMPT=""
+   local CONCH_ARGS=()
+
+   while [ $# -gt 0 ]; do
+      case "$1" in
+         -p)
+            PROMPT="$2"
+            shift 2
+            ;;
+         --)
+            shift
+            CONCH_ARGS=("$@")
+            break
+            ;;
+         *)
+            echo "Usage: amux-tree <branch-name> [-p PROMPT] [-- CONCH_ARGS...]" >&2
+            return 1
+            ;;
+      esac
+   done
+
    "${source_dir}/scripts/worktree.sh" "${BRANCH}" >/dev/null
 
    local PARENT_DIR=$("${source_dir}/scripts/find-worktree-root.sh")
@@ -222,12 +293,23 @@ function amux-tree {
    local DIR_HASH=$(echo -n "${WORKTREE_PATH}" | md5 | head -c 4)
    local SESSION_NAME="${DIR_NAME}-${DIR_HASH}"
 
+   if tmux has-session -t "${SESSION_NAME}" 2>/dev/null && [ -n "${PROMPT}" ]; then
+      echo "amux-tree: session '${SESSION_NAME}' already exists; refusing to send -p prompt to a running conch" >&2
+      return 1
+   fi
+
    tmux new-session -d -s "${SESSION_NAME}" -c "${WORKTREE_PATH}"
    tmux split-window -h -t "${SESSION_NAME}" -c "${WORKTREE_PATH}"
-   tmux send-keys -t "${SESSION_NAME}:0.0" 'conch run' C-m
-   tmux send-keys -t "${SESSION_NAME}:0.1" \
-      "vim GOAL.md && cat \"${SYNC_LOG}\"" C-m
-   tmux select-pane -t "${SESSION_NAME}:0.1"
+   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run ${CONCH_ARGS[*]}" C-m
+
+   if [ -n "${PROMPT}" ]; then
+      tmux send-keys -t "${SESSION_NAME}:0.1" "cat \"${SYNC_LOG}\"" C-m
+      tmux select-pane -t "${SESSION_NAME}:0.0"
+      _amux_send_initial_prompt "${SESSION_NAME}" "0.0" "${PROMPT}" &
+   else
+      tmux send-keys -t "${SESSION_NAME}:0.1" "vim GOAL.md && cat \"${SYNC_LOG}\"" C-m
+      tmux select-pane -t "${SESSION_NAME}:0.1"
+   fi
 
    if [ -n "${TMUX}" ]; then
       tmux switch-client -t "${SESSION_NAME}"
