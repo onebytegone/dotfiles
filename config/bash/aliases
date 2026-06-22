@@ -97,6 +97,15 @@ function gds {
    git diff --stat "$(git merge-base HEAD "${BASE_REF}")"
 }
 
+# `gd [ref]` >> git diff against the merge base of `ref` (default branch if omitted)
+function gd {
+   BASE_REF="${1}"
+   if [ -z "${BASE_REF}" ]; then
+      BASE_REF="$(git rev-parse --abbrev-ref origin/HEAD 2>/dev/null || echo origin/master)"
+   fi
+   git diff "$(git merge-base HEAD "${BASE_REF}")"
+}
+
 function proxy_git {
    if [ $1 = "ub" ]; then
       # Add "username branch", i.e. `git ub branch-name` -> `git checkout -b $(whoami)/branch-name`
