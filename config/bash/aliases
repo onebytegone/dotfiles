@@ -342,6 +342,12 @@ function speak {
    cat "$1" | say -r 400 -i
 }
 
+# `placeholder-video <file>` >> Generate a 10s 720p test video with a 1kHz beep each second
+
+function placeholder-video {
+   ffmpeg -f lavfi -i testsrc=duration=10:size=1280x720:rate=30 -f lavfi -i sine=frequency=1000:duration=10 -vf "showinfo,drawtext=text='$1':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxborderw=10:x=(w-text_w)/2:y=h-th-40" -af "volume='if(lt(mod(t,1),0.1),1,0)':eval=frame" -c:v libx264 -pix_fmt yuv420p -c:a aac "$1"
+}
+
 # `devbox` >> Spawn the current directory as a sandboxed container with Claude Code
 
 function devbox {
