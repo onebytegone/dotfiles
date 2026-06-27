@@ -50,6 +50,19 @@ function mem {
             printf "%9.2f GB  %s\n", total[command] / 1048576, command;
          }
       }' | sort -nr | head -n 10
+
+   vm_stat | awk -v total="$(sysctl -n hw.memsize)" '
+      /page size of/ { page = $8; }
+      /Pages active/ { active = $3; }
+      /Pages wired down/ { wired = $4; }
+      /Pages occupied by compressor/ { compressed = $5; }
+      END {
+         gsub(/\./, "", active);
+         gsub(/\./, "", wired);
+         gsub(/\./, "", compressed);
+         used = (active + wired + compressed) * page;
+         printf "\n%9.2f GB used / %.2f GB total\n", used / 1073741824, total / 1073741824;
+      }'
 }
 
 # `pbenv <NAME>` >> Export pasteboard contents to an environment variable
