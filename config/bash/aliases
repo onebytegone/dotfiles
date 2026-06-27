@@ -26,6 +26,32 @@ alias uppercase="tr '[:lower:]' '[:upper:]'"
 
 alias bell='for I in $(seq 1 5); do printf "\a"; sleep 0.4; done'
 
+# `mem [-v]` >> List the top 10 commands by total resident memory (RSS), in GB.
+# Commands are truncated to the executable name; pass `-v` to show the full path.
+
+function mem {
+   local full=0
+   if [ "$1" = "-v" ]; then
+      full=1
+   fi
+   ps -axo rss,comm | awk -v full="${full}" '
+      {
+         command = "";
+         for (i = 2; i <= NF; i++) {
+            command = command (i > 2 ? " " : "") $i;
+         }
+         if (!full) {
+            sub(/.*\//, "", command);
+         }
+         total[command] += $1;
+      }
+      END {
+         for (command in total) {
+            printf "%9.2f GB  %s\n", total[command] / 1048576, command;
+         }
+      }' | sort -nr | head -n 10
+}
+
 # `pbenv <NAME>` >> Export pasteboard contents to an environment variable
 
 pbenv() {
