@@ -230,6 +230,16 @@ function slsDeployAndTail {
       && sls logs -f "${FUNCTION_NAME}" -t $EXTRA_PARAMS
 }
 
+# `_amux_quote_args` >> Shell-quote each argument so send-keys types them back intact
+
+_amux_quote_args() {
+   local arg QUOTED=""
+   for arg in "$@"; do
+      QUOTED+=" $(printf '%q' "${arg}")"
+   done
+   printf '%s' "${QUOTED# }"
+}
+
 # `_amux_send_initial_prompt` >> Wait for conch boot, then type+submit a prompt in the target pane
 
 _amux_send_initial_prompt() {
@@ -293,7 +303,7 @@ function amux {
 
    tmux new-session -d -s "${SESSION_NAME}" -c "$(pwd)"
    tmux split-window -h -t "${SESSION_NAME}" -c "$(pwd)"
-   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run ${CONCH_ARGS[*]}" C-m
+   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run $(_amux_quote_args "${CONCH_ARGS[@]}")" C-m
    tmux select-pane -t "${SESSION_NAME}:0.0"
 
    if [ -n "${PROMPT}" ]; then
@@ -357,7 +367,7 @@ function amux-tree {
 
    tmux new-session -d -s "${SESSION_NAME}" -c "${WORKTREE_PATH}"
    tmux split-window -h -t "${SESSION_NAME}" -c "${WORKTREE_PATH}"
-   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run ${CONCH_ARGS[*]}" C-m
+   tmux send-keys -t "${SESSION_NAME}:0.0" "conch run $(_amux_quote_args "${CONCH_ARGS[@]}")" C-m
 
    if [ -n "${PROMPT}" ]; then
       tmux send-keys -t "${SESSION_NAME}:0.1" "cat \"${SYNC_LOG}\"" C-m
