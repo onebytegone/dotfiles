@@ -22,7 +22,22 @@ if git -C "${REPO_ROOT}" rev-parse --verify "${BRANCH}" >/dev/null 2>&1; then
 elif git -C "${REPO_ROOT}" rev-parse --verify "origin/${BRANCH}" >/dev/null 2>&1; then
    git -C "${REPO_ROOT}" worktree add --no-checkout -b "${BRANCH}" "${WORKTREE_PATH}" "origin/${BRANCH}" >&2
 else
-   git -C "${REPO_ROOT}" worktree add --no-checkout -b "${BRANCH}" "${WORKTREE_PATH}" "origin/master" >&2
+   # Whatever the primary worktree has checked out is the base for new work, so
+   # a `master` folder sitting on `next` branches from `next`. Prefer that
+   # branch's upstream over its local tip, since we just fetched.
+   BASE_REF="$(git -C "${REPO_ROOT}" rev-parse --abbrev-ref --symbolic-full-name 'HEAD@{upstream}' 2>/dev/null || true)"
+
+   if [ -z "${BASE_REF}" ]; then
+      BASE_REF="$(git -C "${REPO_ROOT}" rev-parse --abbrev-ref HEAD)"
+   fi
+
+   if [ "${BASE_REF}" = 'HEAD' ]; then
+      echo "ERROR: ${REPO_ROOT} is in detached HEAD; check out the branch to base new worktrees on" >&2
+      exit 1
+   fi
+
+   echo "Creating ${BRANCH} from ${BASE_REF}" >&2
+   git -C "${REPO_ROOT}" worktree add --no-checkout -b "${BRANCH}" "${WORKTREE_PATH}" "${BASE_REF}" >&2
 fi
 
 touch -t "$(date '+%Y%m%d%H%M.%S')" "${WORKTREE_PATH}"
